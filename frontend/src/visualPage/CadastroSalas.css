@@ -1,0 +1,83 @@
+/* Centraliza o formulário e define o estilo da caixa de cadastro */
+.container-cadastro-salas {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f4f4f4;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Estiliza o título */
+  .container-cadastro-salas h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-family: Arial, sans-serif;
+    color: #333;
+  }
+  
+  /* Define o estilo das labels */
+  .container-cadastro-salas label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    font-size: 14px;
+    color: #555;
+  }
+  
+  /* Estiliza os inputs do formulário */
+  .container-cadastro-salas input[type="text"],
+  .container-cadastro-salas input[type="number"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    color: #333;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease;
+  }
+  
+  /* Foca nos inputs quando o usuário clica neles */
+  .container-cadastro-salas input[type="text"]:focus,
+  .container-cadastro-salas input[type="number"]:focus {
+    border-color: #007bff;
+    outline: none;
+  }
+  
+  /* Estiliza o botão de cadastro */
+  .container-cadastro-salas button {
+    width: 100%;
+    padding: 12px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  /* Altera a cor do botão ao passar o mouse */
+  .container-cadastro-salas button:hover {
+    background-color: #45a049;
+  }
+  
+  /* Estilo responsivo para telas menores */
+  @media (max-width: 600px) {
+    .container-cadastro-salas {
+      padding: 15px;
+    }
+  
+    .container-cadastro-salas input[type="text"],
+    .container-cadastro-salas input[type="number"] {
+      font-size: 14px;
+    }
+  
+    .container-cadastro-salas button {
+      font-size: 14px;
+      padding: 10px;
+    }
+  }
+  

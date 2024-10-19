@@ -1,0 +1,41 @@
+/* Sidebar.css */
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 250px; /* Largura do Sidebar */
+    height: 100%;
+    background-color: #333; /* Cor de fundo */
+    color: white; /* Cor do texto */
+    padding-top: 20px; /* Espaçamento no topo */
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* Sombra para destaque */
+  }
+  
+  .sidebar a {
+    padding: 15px 20px; /* Espaçamento interno dos links */
+    text-decoration: none; /* Remove sublinhado */
+    font-size: 18px; /* Tamanho da fonte */
+    color: white; /* Cor dos links */
+    display: block; /* Links ocupam toda a linha */
+  }
+  
+  .sidebar a:hover {
+    background-color: #575757; /* Cor de fundo ao passar o mouse */
+  }
+  
+  .sidebar .active {
+    background-color: #4CAF50; /* Cor do link ativo */
+  }
+  
+  .sidebar h2 {
+    padding-left: 20px; /* Espaçamento para o título */
+    font-size: 22px; /* Tamanho do título */
+    color: #f2f2f2; /* Cor do título */
+  }
+  
+  .main-content {
+    margin-left: 250px; /* Espaçamento à esquerda para não sobrepor o sidebar */
+    padding: 20px; /* Espaçamento interno para o conteúdo */
+  }
+  
