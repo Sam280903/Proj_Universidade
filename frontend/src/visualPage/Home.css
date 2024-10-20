@@ -1,21 +1,74 @@
+/* src/components/visualPage/Home.css */
+
+/* Contêiner principal da home */
 .home-container {
   text-align: center;
-  padding: 20px;
+  padding: 40px 20px; /* Aumenta o espaçamento e torna mais equilibrado */
+  background-color: #f9f9f9; /* Fundo suave para contrastar com o conteúdo */
 }
 
+/* Estiliza o título principal da home */
 .home-title {
-  font-size: 2rem;
+  font-size: 2.5rem; /* Aumenta o tamanho do título para maior destaque */
   color: #333;
+  font-family: 'Arial', sans-serif; /* Fonte simples e moderna */
+  margin-bottom: 15px;
+  font-weight: bold; /* Torna o título mais marcante */
+  text-transform: capitalize; /* Adiciona uma leve formatação de caixa alta */
 }
 
+/* Estiliza a descrição abaixo do título */
 .home-description {
-  font-size: 1rem;
+  font-size: 1.2rem; /* Tamanho maior para maior legibilidade */
   color: #666;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
+  font-family: 'Verdana', sans-serif; /* Fonte para descrição mais legível */
+  line-height: 1.6; /* Melhora a legibilidade com espaçamento entre linhas */
+  text-align: justify; /* Justifica o texto para dar uma aparência mais alinhada */
+  max-width: 800px; /* Limita a largura do parágrafo para evitar textos muito largos */
+  margin-left: auto;
+  margin-right: auto;
 }
 
+/* Estiliza o logo */
 .home-logo img {
-  max-width: 100%; /* Faz com que a imagem se ajuste ao tamanho da tela */
+  max-width: 80%; /* Ajusta a largura máxima do logo para não ultrapassar o limite da tela */
   height: auto;
   margin-top: 20px;
+  transition: transform 0.3s ease; /* Adiciona transição suave */
+}
+
+/* Efeito ao passar o mouse sobre o logo */
+.home-logo img:hover {
+  transform: scale(1.05); /* Aumenta ligeiramente o tamanho do logo ao passar o mouse */
+}
+
+/* Estilos responsivos para dispositivos menores */
+@media (max-width: 768px) {
+  .home-title {
+    font-size: 2rem; /* Reduz o tamanho do título em telas menores */
+  }
+
+  .home-description {
+    font-size: 1rem; /* Ajusta o tamanho da descrição */
+    margin-bottom: 20px; /* Reduz o espaçamento inferior */
+  }
+
+  .home-logo img {
+    max-width: 90%; /* Ajusta a largura do logo em dispositivos menores */
+  }
+}
+
+@media (max-width: 480px) {
+  .home-container {
+    padding: 30px 15px; /* Ajusta o preenchimento para telas muito pequenas */
+  }
+
+  .home-title {
+    font-size: 1.8rem; /* Diminui o título em dispositivos extra pequenos */
+  }
+
+  .home-description {
+    font-size: 0.95rem; /* Ajusta ainda mais o tamanho da descrição */
+  }
 }

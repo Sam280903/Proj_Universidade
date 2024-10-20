@@ -1,86 +1,103 @@
+/* src/components/visualPage/CadastroProfessores.css */
+
 /* Centraliza o formulário e define o estilo da caixa de cadastro */
 .container-cadastro-professores {
-    max-width: 500px;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: #f4f4f4;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  max-width: 500px; /* A mesma largura máxima */
+  margin: 50px auto;
+  padding: 20px;
+  background-color: #f4f4f4; /* Cor de fundo igual ao das outras seções */
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra suave */
+}
+
+/* Estiliza o título */
+.container-cadastro-professores h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  font-family: Arial, sans-serif;
+  color: #333;
+}
+
+/* Define a estrutura do formulário */
+.form-container {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Define o estilo das labels */
+.container-cadastro-professores label {
+  margin-bottom: 5px;
+  font-weight: bold;
+  font-size: 14px;
+  color: #555;
+}
+
+/* Estiliza os inputs do formulário */
+.container-cadastro-professores input[type="text"],
+.container-cadastro-professores input[type="email"],
+.container-cadastro-professores input[type="date"] {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 100%;
+  font-size: 16px;
+  color: #333;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease;
+}
+
+/* Foca nos inputs quando o usuário clica neles */
+.container-cadastro-professores input[type="text"]:focus,
+.container-cadastro-professores input[type="email"]:focus,
+.container-cadastro-professores input[type="date"]:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+/* Estiliza os botões */
+.buttons {
+  display: flex;
+  justify-content: space-around;
+}
+
+/* Estilo para o botão principal */
+button {
+  width: 100%;
+  padding: 12px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+/* Altera a cor do botão ao passar o mouse */
+button:hover {
+  background-color: #45a049;
+}
+
+/* Desabilita o botão */
+button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+/* Estilo responsivo para telas menores */
+@media (max-width: 600px) {
+  .container-cadastro-professores {
+    padding: 15px;
   }
-  
-  /* Estiliza o título */
-  .container-cadastro-professores h2 {
-    text-align: center;
-    margin-bottom: 20px;
-    font-family: Arial, sans-serif;
-    color: #333;
-  }
-  
-  /* Define o estilo das labels */
-  .container-cadastro-professores label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
-    font-size: 14px;
-    color: #555;
-  }
-  
-  /* Estiliza os inputs do formulário */
+
   .container-cadastro-professores input[type="text"],
   .container-cadastro-professores input[type="email"],
   .container-cadastro-professores input[type="date"] {
-    width: 100%;
+    font-size: 14px;
+  }
+
+  .buttons button {
+    font-size: 14px;
     padding: 10px;
-    margin-bottom: 15px;
-    border-radius: 4px;
-    border: 1px solid #ccc;
-    font-size: 16px;
-    color: #333;
-    box-sizing: border-box;
-    transition: border-color 0.3s ease;
   }
-  
-  /* Foca nos inputs quando o usuário clica neles */
-  .container-cadastro-professores input[type="text"]:focus,
-  .container-cadastro-professores input[type="email"]:focus,
-  .container-cadastro-professores input[type="date"]:focus {
-    border-color: #007bff;
-    outline: none;
-  }
-  
-  /* Estiliza o botão de cadastro */
-  .container-cadastro-professores button {
-    width: 100%;
-    padding: 12px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  /* Altera a cor do botão ao passar o mouse */
-  .container-cadastro-professores button:hover {
-    background-color: #45a049;
-  }
-  
-  /* Estilo responsivo para telas menores */
-  @media (max-width: 600px) {
-    .container-cadastro-professores {
-      padding: 15px;
-    }
-  
-    .container-cadastro-professores input[type="text"],
-    .container-cadastro-professores input[type="email"],
-    .container-cadastro-professores input[type="date"] {
-      font-size: 14px;
-    }
-  
-    .container-cadastro-professores button {
-      font-size: 14px;
-      padding: 10px;
-    }
-  }
-  
+}

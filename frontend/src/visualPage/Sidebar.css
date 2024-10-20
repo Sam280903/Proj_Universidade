@@ -1,41 +1,109 @@
-/* Sidebar.css */
+/* src/components/sidebar/Sidebar.css */
 
+/* Estilos principais da sidebar */
 .sidebar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 250px; /* Largura do Sidebar */
-    height: 100%;
-    background-color: #333; /* Cor de fundo */
-    color: white; /* Cor do texto */
-    padding-top: 20px; /* Espaçamento no topo */
-    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* Sombra para destaque */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 250px; /* Largura do Sidebar */
+  height: 100%;
+  background-color: #333; /* Cor de fundo */
+  color: white; /* Cor do texto */
+  padding-top: 20px; /* Espaçamento no topo */
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* Sombra para destaque */
+  transition: width 0.3s ease; /* Animação suave para o aumento ou redução de largura */
+}
+
+/* Estilo dos links na sidebar */
+.sidebar a {
+  padding: 15px 20px; /* Espaçamento interno dos links */
+  text-decoration: none; /* Remove sublinhado */
+  font-size: 18px; /* Tamanho da fonte */
+  color: white; /* Cor dos links */
+  display: block; /* Links ocupam toda a linha */
+  transition: background-color 0.3s ease, padding-left 0.3s ease; /* Animação suave de cor e padding */
+}
+
+/* Efeito ao passar o mouse sobre os links */
+.sidebar a:hover {
+  background-color: #575757; /* Cor de fundo ao passar o mouse */
+  padding-left: 30px; /* Aumenta o espaçamento à esquerda ao passar o mouse */
+}
+
+/* Estilo do link ativo */
+.sidebar .active {
+  background-color: #4CAF50; /* Cor do link ativo */
+  padding-left: 30px; /* Aumenta o espaçamento à esquerda para o link ativo */
+}
+
+/* Estilo do título da sidebar */
+.sidebar h2 {
+  padding-left: 20px; /* Espaçamento para o título */
+  font-size: 22px; /* Tamanho do título */
+  color: #f2f2f2; /* Cor do título */
+  font-weight: bold; /* Torna o título mais forte */
+  margin-bottom: 20px; /* Espaçamento abaixo do título */
+}
+
+/* Estilo para a parte principal do conteúdo (para não sobrepor a sidebar) */
+.main-content {
+  margin-left: 250px; /* Espaçamento à esquerda para não sobrepor o sidebar */
+  padding: 20px; /* Espaçamento interno para o conteúdo */
+  transition: margin-left 0.3s ease; /* Animação suave para o deslocamento do conteúdo */
+}
+
+/* Responsividade: Sidebar em telas menores */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 200px; /* Reduz a largura da sidebar em telas menores */
   }
-  
-  .sidebar a {
-    padding: 15px 20px; /* Espaçamento interno dos links */
-    text-decoration: none; /* Remove sublinhado */
-    font-size: 18px; /* Tamanho da fonte */
-    color: white; /* Cor dos links */
-    display: block; /* Links ocupam toda a linha */
-  }
-  
-  .sidebar a:hover {
-    background-color: #575757; /* Cor de fundo ao passar o mouse */
-  }
-  
-  .sidebar .active {
-    background-color: #4CAF50; /* Cor do link ativo */
-  }
-  
-  .sidebar h2 {
-    padding-left: 20px; /* Espaçamento para o título */
-    font-size: 22px; /* Tamanho do título */
-    color: #f2f2f2; /* Cor do título */
-  }
-  
+
   .main-content {
-    margin-left: 250px; /* Espaçamento à esquerda para não sobrepor o sidebar */
-    padding: 20px; /* Espaçamento interno para o conteúdo */
+    margin-left: 200px; /* Ajusta o conteúdo para se ajustar ao novo tamanho da sidebar */
+  }
+}
+
+/* Responsividade para telas muito pequenas (ex: dispositivos móveis) */
+@media (max-width: 480px) {
+  .sidebar {
+    width: 0; /* Oculta a sidebar em dispositivos pequenos */
+    padding-top: 10px; /* Reduz o preenchimento superior */
+  }
+
+  .sidebar a {
+    padding: 10px 15px; /* Reduz o espaçamento interno dos links */
+    font-size: 16px; /* Diminui o tamanho da fonte */
+  }
+
+  .sidebar .active {
+    padding-left: 20px; /* Ajusta o padding do link ativo */
+  }
+
+  .main-content {
+    margin-left: 0; /* Remove o espaçamento à esquerda quando a sidebar estiver oculta */
+  }
+
+  /* Barra de navegação para telas pequenas, com um botão de abrir/fechar */
+  .sidebar-toggle {
+    display: block; /* Exibe um botão para abrir a sidebar */
+    position: fixed;
+    top: 15px;
+    left: 15px;
+    font-size: 24px;
+    background-color: #333;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
   }
   
+  /* Quando a sidebar estiver visível em telas pequenas */
+  .sidebar.open {
+    width: 250px; /* Expande a sidebar */
+  }
+
+  .sidebar.open .sidebar-toggle {
+    display: none; /* Esconde o botão quando a sidebar está aberta */
+  }
+}

@@ -1,5 +1,6 @@
-import React from 'react'; 
-import { Route, Routes } from 'react-router-dom';
+// src/App.js
+import React from 'react';
+import { Routes, Route } from 'react-router-dom';  // Não precisa mais importar o Router
 import Sidebar from './components/Sidebar';
 
 // Telas de cadastro
@@ -25,21 +26,21 @@ function App() {
       <div style={{ marginLeft: '250px', padding: '20px' }}>
         <Routes>
           {/* Rotas de cadastro */}
-          <Route path="/cadastro/alunos" element={<CadastroAlunos />} />
-          <Route path="/cadastro/disciplinas" element={<CadastroDisciplinas />} />
-          <Route path="/cadastro/professores" element={<CadastroProfessores />} />
-          <Route path="/cadastro/salas" element={<CadastroSalas />} />
-          <Route path="/cadastro/turmas" element={<CadastroTurmas />} />
+          <Route path="/cadastros/CadastroAlunos" element={<CadastroAlunos />} />
+          <Route path="/cadastros/CadastroDisciplinas" element={<CadastroDisciplinas />} />
+          <Route path="/cadastros/CadastroProfessores" element={<CadastroProfessores />} />
+          <Route path="/cadastros/CadastroSalas" element={<CadastroSalas />} />
+          <Route path="/cadastros/CadastroTurmas" element={<CadastroTurmas />} />
 
           {/* Rotas de consulta */}
-          <Route path="/consulta/alunos" element={<ConsultaAlunos />} />
-          <Route path="/consulta/disciplinas" element={<ConsultaDisciplinas />} />
-          <Route path="/consulta/professores" element={<ConsultaProfessores />} />
-          <Route path="/consulta/salas" element={<ConsultaSalas />} />
-          <Route path="/consulta/turmas" element={<ConsultaTurmas />} />
+          <Route path="/consultas/ConsultaAlunos" element={<ConsultaAlunos />} />
+          <Route path="/consultas/ConsultaDisciplinas" element={<ConsultaDisciplinas />} />
+          <Route path="/consultas/ConsultaProfessores" element={<ConsultaProfessores />} />
+          <Route path="/consultas/ConsultaSalas" element={<ConsultaSalas />} />
+          <Route path="/consultas/ConsultaTurmas" element={<ConsultaTurmas />} />
 
           {/* Página inicial */}
-          <Route path="/" element={<Home />} />
+          <Route path="/Home" element={<Home />} />
         </Routes>
       </div>
     </div>
