@@ -1,0 +1,5 @@
+# Ignorar node_modules apenas dentro do backend
+node_modules/
+
+# Ignorar o arquivo .env apenas no backend
+.env

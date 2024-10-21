@@ -56,7 +56,7 @@ const CadastroDisciplinas = () => {
   const handleSalvar = async () => {
     if (novoCadastro) {
       // Enviar os dados para o backend (novo cadastro)
-      const novaDisciplina = { ...disciplinaAtual, id: disciplinas.length + 1 }; // ID gerado no frontend, mas será ajustado no backend
+      const novaDisciplina = { ...disciplinaAtual }; // ID será gerado no backend
       const response = await fetch('/api/disciplinas', {
         method: 'POST',
         headers: {
@@ -157,7 +157,7 @@ const CadastroDisciplinas = () => {
         <ul>
           {disciplinas.map(disciplina => (
             <li key={disciplina.id} onClick={() => setDisciplinaAtual(disciplina)}>
-              {disciplina.nome} - {disciplina.cargaHoraria}h
+              {disciplina.nome}
             </li>
           ))}
         </ul>

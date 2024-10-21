@@ -1,151 +1,131 @@
-import React, { useState } from 'react';
-import '../../visualPage/CadastroSalas.css'; // Importe o arquivo CSS
-
-// Mock de dados iniciais (simulando um banco de dados)
-const mockSalas = [
-  { id: 1, numeroSala: '101', capacidade: 30, dataCadastro: '2024-01-01' },
-];
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';  // Importando Axios para fazer as requisições HTTP
+import { useNavigate } from 'react-router-dom'; // Importando para navegação
+import '../../visualPage/CadastroSalas.css'; // Importando o arquivo CSS
 
 const CadastroSalas = () => {
-  const [salas, setSalas] = useState(mockSalas);
-  const [salaAtual, setSalaAtual] = useState({ id: null, numeroSala: '', capacidade: '', dataCadastro: '' });
-  const [isEditing, setIsEditing] = useState(false);
-  const [novoCadastro, setNovoCadastro] = useState(false);
+  const navigate = useNavigate();
+  
+  // Estados para controlar os dados da sala
+  const [numeroSala, setNumeroSala] = useState('');
+  const [capacidade, setCapacidade] = useState('');
+  const [salas, setSalas] = useState([]);
+  const [dataCadastro, setDataCadastro] = useState('');
+  
+  // Estados de habilitação dos botões
+  const [canEdit, setCanEdit] = useState(false);
+  const [canDelete, setCanDelete] = useState(false);
+  const [canConsult, setCanConsult] = useState(true);
+  const [canCreate, setCanCreate] = useState(true);
 
-  // Handle novo cadastro
-  const handleNovo = () => {
-    setSalaAtual({ id: null, numeroSala: '', capacidade: '', dataCadastro: new Date().toISOString().split('T')[0] });
-    setIsEditing(true);
-    setNovoCadastro(true);
-  };
+  // Função para carregar as salas cadastradas
+  useEffect(() => {
+    fetchSalas();
+  }, []);
 
-  // Handle edição de sala
-  const handleEdit = (sala) => {
-    setSalaAtual(sala);
-    setIsEditing(true);
-    setNovoCadastro(false);
-  };
-
-  // Handle exclusão de sala
-  const handleExcluir = (id) => {
-    setSalas(salas.filter(sala => sala.id !== id));
-    setSalaAtual(salas[0] || {});
-    setIsEditing(false);
-  };
-
-  // Handle salvar sala (edição ou novo)
-  const handleSalvar = async () => {
+  const fetchSalas = async () => {
     try {
-      let response;
-      if (novoCadastro) {
-        // Para salvar nova sala (simulação)
-        response = await fetch('/api/salas', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(salaAtual),
-        });
-        if (response.ok) {
-          const novaSala = { ...salaAtual, id: salas.length + 1 };
-          setSalas([...salas, novaSala]);
-        }
-      } else {
-        // Para atualizar sala existente
-        response = await fetch(`/api/salas/${salaAtual.id}`, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(salaAtual),
-        });
-        if (response.ok) {
-          setSalas(salas.map(sala => (sala.id === salaAtual.id ? salaAtual : sala)));
-        }
-      }
-      setIsEditing(false);
-      setNovoCadastro(false);
-    } catch (error) {
-      console.error('Erro na requisição:', error);
+      const response = await axios.get('http://localhost:5000/api/salas');
+      setSalas(response.data);
+    } catch (err) {
+      console.error('Erro ao consultar salas:', err);
     }
   };
 
-  // Handle cancelar edição/novo cadastro
-  const handleCancelar = () => {
-    setSalaAtual(salas[0] || {});
-    setIsEditing(false);
-    setNovoCadastro(false);
+  // Função para criar nova sala
+  const handleCreateNewSala = async () => {
+    try {
+      const response = await axios.post('http://localhost:5000/api/salas', {
+        numeroSala,
+        capacidade,
+        dataCadastro
+      });
+      console.log(response.data);
+      fetchSalas();  // Atualiza a lista de salas
+      setNumeroSala('');
+      setCapacidade('');
+      setDataCadastro('');
+    } catch (err) {
+      console.error('Erro ao criar sala:', err);
+    }
   };
 
-  // Handle mudança nos campos
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setSalaAtual(prev => ({ ...prev, [name]: value }));
+  // Função para editar sala
+  const handleEditSala = async (id) => {
+    try {
+      const response = await axios.put(`http://localhost:5000/api/salas/${id}`, {
+        numeroSala,
+        capacidade,
+        dataCadastro
+      });
+      console.log(response.data);
+      fetchSalas();  // Atualiza a lista de salas
+    } catch (err) {
+      console.error('Erro ao editar sala:', err);
+    }
+  };
+
+  // Função para excluir sala
+  const handleDeleteSala = async (id) => {
+    try {
+      const response = await axios.delete(`http://localhost:5000/api/salas/${id}`);
+      console.log(response.data);
+      fetchSalas();  // Atualiza a lista de salas
+    } catch (err) {
+      console.error('Erro ao excluir sala:', err);
+    }
+  };
+
+  // Função para navegar para a consulta de salas
+  const handleConsultSalas = () => {
+    navigate('/consulta/salas');
   };
 
   return (
     <div className="container-cadastro-salas">
-      <h2>{novoCadastro ? 'Nova Sala' : 'Cadastro de Sala'}</h2>
-      <form>
-        <div>
-          <label>ID:</label>
-          <input type="text" value={salaAtual.id || ''} disabled />
-        </div>
-        <div>
-          <label>Número da Sala:</label>
-          <input
-            type="text"
-            name="numeroSala"
-            value={salaAtual.numeroSala}
-            onChange={handleChange}
-            disabled={!isEditing}
-            required
-          />
-        </div>
-        <div>
-          <label>Capacidade:</label>
-          <input
-            type="number"
-            name="capacidade"
-            value={salaAtual.capacidade}
-            onChange={handleChange}
-            disabled={!isEditing}
-            required
-          />
-        </div>
-        <div>
-          <label>Data de Cadastro:</label>
-          <input
-            type="date"
-            name="dataCadastro"
-            value={salaAtual.dataCadastro}
-            onChange={handleChange}
-            disabled={!isEditing}
-            required
-          />
-        </div>
+      <h2>Cadastro de Sala</h2>
 
-        <div className="buttons">
-          {isEditing ? (
-            <>
-              <button type="button" onClick={handleSalvar}>Salvar</button>
-              <button type="button" onClick={handleCancelar}>Cancelar</button>
-            </>
-          ) : (
-            <>
-              <button type="button" onClick={handleNovo}>Novo</button>
-              <button type="button" onClick={() => handleEdit(salaAtual)}>Editar</button>
-              <button type="button" onClick={() => handleExcluir(salaAtual.id)}>Excluir</button>
-            </>
-          )}
-        </div>
-      </form>
+      {/* Formulário de cadastro */}
+      <div>
+        <input
+          type="text"
+          placeholder="Número da Sala"
+          value={numeroSala}
+          onChange={(e) => setNumeroSala(e.target.value)}
+        />
+        <input
+          type="number"
+          placeholder="Capacidade"
+          value={capacidade}
+          onChange={(e) => setCapacidade(e.target.value)}
+        />
+        <input
+          type="date"
+          placeholder="Data de Cadastro"
+          value={dataCadastro}
+          onChange={(e) => setDataCadastro(e.target.value)}
+        />
 
-      <div className="lista-salas">
-        <h3>Salas Cadastradas:</h3>
+        <button onClick={handleCreateNewSala} disabled={!canCreate}>Cadastrar</button>
+      </div>
+
+      {/* Lista de salas */}
+      <div>
+        <h3>Salas Cadastradas</h3>
         <ul>
           {salas.map(sala => (
-            <li key={sala.id} onClick={() => setSalaAtual(sala)}>
+            <li key={sala.id}>
               Sala {sala.numeroSala} - Capacidade: {sala.capacidade}
+              <button onClick={() => handleEditSala(sala.id)} disabled={!canEdit}>Editar</button>
+              <button onClick={() => handleDeleteSala(sala.id)} disabled={!canDelete}>Excluir</button>
             </li>
           ))}
         </ul>
+      </div>
+
+      {/* Botões de navegação */}
+      <div>
+        <button onClick={handleConsultSalas} disabled={!canConsult}>Consultar Salas</button>
       </div>
     </div>
   );
