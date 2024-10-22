@@ -1,24 +1,20 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';  // Importando Axios para fazer as requisições HTTP
-import { useNavigate } from 'react-router-dom'; // Importando para navegação
-import '../../visualPage/CadastroSalas.css'; // Importando o arquivo CSS
+import React, { useState, useEffect } from 'react'; 
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import '../../visualPage/CadastroSalas.css';
 
 const CadastroSalas = () => {
   const navigate = useNavigate();
-  
-  // Estados para controlar os dados da sala
   const [numeroSala, setNumeroSala] = useState('');
   const [capacidade, setCapacidade] = useState('');
-  const [salas, setSalas] = useState([]);
   const [dataCadastro, setDataCadastro] = useState('');
-  
-  // Estados de habilitação dos botões
-  const [canEdit, setCanEdit] = useState(false);
-  const [canDelete, setCanDelete] = useState(false);
+  const [isActive, setIsActive] = useState(true); // Estado para controlar se a sala está ativa
+  const [salas, setSalas] = useState([]);
+  const [canEdit, setCanEdit] = useState(true);
+  const [canDelete, setCanDelete] = useState(true);
   const [canConsult, setCanConsult] = useState(true);
   const [canCreate, setCanCreate] = useState(true);
 
-  // Função para carregar as salas cadastradas
   useEffect(() => {
     fetchSalas();
   }, []);
@@ -32,61 +28,59 @@ const CadastroSalas = () => {
     }
   };
 
-  // Função para criar nova sala
   const handleCreateNewSala = async () => {
     try {
-      const response = await axios.post('http://localhost:5000/api/salas', {
+      await axios.post('http://localhost:5000/api/salas', {
         numeroSala,
         capacidade,
-        dataCadastro
+        dataCadastro,
+        isActive, // Enviar o estado ativo/inativo ao criar uma nova sala
       });
-      console.log(response.data);
-      fetchSalas();  // Atualiza a lista de salas
-      setNumeroSala('');
-      setCapacidade('');
-      setDataCadastro('');
+      fetchSalas();
+      clearFields();
     } catch (err) {
       console.error('Erro ao criar sala:', err);
     }
   };
 
-  // Função para editar sala
   const handleEditSala = async (id) => {
     try {
-      const response = await axios.put(`http://localhost:5000/api/salas/${id}`, {
+      await axios.put(`http://localhost:5000/api/salas/${id}`, {
         numeroSala,
         capacidade,
-        dataCadastro
+        dataCadastro,
+        isActive, // Enviar o estado ativo/inativo ao editar
       });
-      console.log(response.data);
-      fetchSalas();  // Atualiza a lista de salas
+      fetchSalas();
     } catch (err) {
       console.error('Erro ao editar sala:', err);
     }
   };
 
-  // Função para excluir sala
   const handleDeleteSala = async (id) => {
     try {
-      const response = await axios.delete(`http://localhost:5000/api/salas/${id}`);
-      console.log(response.data);
-      fetchSalas();  // Atualiza a lista de salas
+      await axios.delete(`http://localhost:5000/api/salas/${id}`);
+      fetchSalas();
     } catch (err) {
       console.error('Erro ao excluir sala:', err);
     }
   };
 
-  // Função para navegar para a consulta de salas
   const handleConsultSalas = () => {
     navigate('/consulta/salas');
+  };
+
+  const clearFields = () => {
+    setNumeroSala('');
+    setCapacidade('');
+    setDataCadastro('');
+    setIsActive(true); // Resetar para ativo por padrão após cadastro
   };
 
   return (
     <div className="container-cadastro-salas">
       <h2>Cadastro de Sala</h2>
-
-      {/* Formulário de cadastro */}
-      <div>
+      <div className="form-container">
         <input
           type="text"
           placeholder="Número da Sala"
@@ -106,26 +100,25 @@ const CadastroSalas = () => {
           onChange={(e) => setDataCadastro(e.target.value)}
         />
 
-        <button onClick={handleCreateNewSala} disabled={!canCreate}>Cadastrar</button>
+        {/* Checkbox para inativar sala */}
+        <div>
+          <label>
+            <input
+              type="checkbox"
+              checked={!isActive} // Quando marcado, a sala será inativa
+              onChange={(e) => setIsActive(!e.target.checked)} // Alterar estado ativo/inativo
+            />
+            Inativar sala
+          </label>
+        </div>
       </div>
 
-      {/* Lista de salas */}
-      <div>
-        <h3>Salas Cadastradas</h3>
-        <ul>
-          {salas.map(sala => (
-            <li key={sala.id}>
-              Sala {sala.numeroSala} - Capacidade: {sala.capacidade}
-              <button onClick={() => handleEditSala(sala.id)} disabled={!canEdit}>Editar</button>
-              <button onClick={() => handleDeleteSala(sala.id)} disabled={!canDelete}>Excluir</button>
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      {/* Botões de navegação */}
-      <div>
-        <button onClick={handleConsultSalas} disabled={!canConsult}>Consultar Salas</button>
+      {/* Botões para ação */}
+      <div className="buttons">
+        <button onClick={handleCreateNewSala} disabled={!canCreate}>Novo</button>
+        <button onClick={handleEditSala} disabled={!canEdit}>Editar</button>
+        <button onClick={handleDeleteSala} disabled={!canDelete}>Excluir</button>
+        <button onClick={handleConsultSalas} disabled={!canConsult}>Consultar</button>
       </div>
     </div>
   );

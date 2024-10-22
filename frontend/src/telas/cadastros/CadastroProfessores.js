@@ -1,151 +1,123 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import '../../visualPage/CadastroProfessores.css'; // Importe o arquivo CSS
 
-// Mock de dados iniciais (simulando um banco de dados)
-const mockProfessores = [
-  { id: 1, nome: 'João Silva', email: 'joao@exemplo.com', dataCadastro: '2024-01-01' },
-];
-
 const CadastroProfessores = () => {
-  const [professores, setProfessores] = useState(mockProfessores);
-  const [professorAtual, setProfessorAtual] = useState({ id: null, nome: '', email: '', dataCadastro: '' });
-  const [isEditing, setIsEditing] = useState(false);
-  const [novoCadastro, setNovoCadastro] = useState(false);
+  const [nome, setNome] = useState('');
+  const [email, setEmail] = useState('');
+  const [dataCadastro, setDataCadastro] = useState('');
+  const [ativo, setAtivo] = useState(true); // Estado para ativo/inativo
+  const [idProfessorEditando, setIdProfessorEditando] = useState(null);
 
-  // Handle novo cadastro
-  const handleNovo = () => {
-    setProfessorAtual({ id: null, nome: '', email: '', dataCadastro: new Date().toISOString().split('T')[0] });
-    setIsEditing(true);
-    setNovoCadastro(true);
-  };
+  // Estados para controlar habilitação de botões
+  const [canCreate, setCanCreate] = useState(true);
+  const [canEdit, setCanEdit] = useState(false);
+  const [canDelete, setCanDelete] = useState(false);
+  const [canConsult, setCanConsult] = useState(true);
 
-  // Handle edição de professor
-  const handleEdit = (professor) => {
-    setProfessorAtual(professor);
-    setIsEditing(true);
-    setNovoCadastro(false);
-  };
-
-  // Handle exclusão de professor
-  const handleExcluir = (id) => {
-    setProfessores(professores.filter(professor => professor.id !== id));
-    setProfessorAtual(professores[0] || {});
-    setIsEditing(false);
-  };
-
-  // Handle salvar professor (edição ou novo)
-  const handleSalvar = async () => {
+  // Função para criar um novo professor
+  const handleCreateNewProfessor = async () => {
     try {
-      let response;
-      if (novoCadastro) {
-        // Para salvar novo professor (simulação)
-        response = await fetch('/api/professores', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(professorAtual),
-        });
-        if (response.ok) {
-          const novoProfessor = { ...professorAtual, id: professores.length + 1 };
-          setProfessores([...professores, novoProfessor]);
-        }
-      } else {
-        // Para atualizar professor existente
-        response = await fetch(`/api/professores/${professorAtual.id}`, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(professorAtual),
-        });
-        if (response.ok) {
-          setProfessores(professores.map(professor => (professor.id === professorAtual.id ? professorAtual : professor)));
-        }
-      }
-      setIsEditing(false);
-      setNovoCadastro(false);
-    } catch (error) {
-      console.error('Erro na requisição:', error);
+      await axios.post('http://localhost:5000/api/professores', {
+        nome,
+        email,
+        dataCadastro,
+        ativo,
+      });
+      limparCampos();
+    } catch (err) {
+      console.error('Erro ao criar professor:', err);
     }
   };
 
-  // Handle cancelar edição/novo cadastro
-  const handleCancelar = () => {
-    setProfessorAtual(professores[0] || {});
-    setIsEditing(false);
-    setNovoCadastro(false);
+  // Função para editar um professor existente
+  const handleEditProfessor = async () => {
+    try {
+      if (idProfessorEditando) {
+        await axios.put(`http://localhost:5000/api/professores/${idProfessorEditando}`, {
+          nome,
+          email,
+          dataCadastro,
+          ativo,
+        });
+        limparCampos();
+        setIdProfessorEditando(null);
+      }
+    } catch (err) {
+      console.error('Erro ao editar professor:', err);
+    }
   };
 
-  // Handle mudança nos campos
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setProfessorAtual(prev => ({ ...prev, [name]: value }));
+  // Função para excluir um professor
+  const handleDeleteProfessor = async () => {
+    try {
+      if (idProfessorEditando) {
+        await axios.delete(`http://localhost:5000/api/professores/${idProfessorEditando}`);
+        limparCampos();
+        setIdProfessorEditando(null);
+      }
+    } catch (err) {
+      console.error('Erro ao excluir professor:', err);
+    }
+  };
+
+  // Função para consultar professores
+  const handleConsultProfessors = () => {
+    console.log('Consultando professores...');
+    // Implementação da lógica de consulta
+  };
+
+  // Função para limpar os campos do formulário
+  const limparCampos = () => {
+    setNome('');
+    setEmail('');
+    setDataCadastro('');
+    setAtivo(true); // Por padrão, ativo
+    setIdProfessorEditando(null); // Sai do modo de edição
+    setCanEdit(false);
+    setCanDelete(false);
   };
 
   return (
     <div className="container-cadastro-professores">
-      <h2>{novoCadastro ? 'Novo Professor' : 'Cadastro de Professor'}</h2>
-      <form>
+      <h2>Cadastro de Professores</h2>
+      <div className="form-cadastro">
+        <input
+          type="text"
+          placeholder="Nome"
+          value={nome}
+          onChange={(e) => setNome(e.target.value)}
+        />
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <input
+          type="date"
+          placeholder="Data de Cadastro"
+          value={dataCadastro}
+          onChange={(e) => setDataCadastro(e.target.value)}
+        />
+
         <div>
-          <label>ID:</label>
-          <input type="text" value={professorAtual.id || ''} disabled />
-        </div>
-        <div>
-          <label>Nome:</label>
-          <input
-            type="text"
-            name="nome"
-            value={professorAtual.nome}
-            onChange={handleChange}
-            disabled={!isEditing}
-            required
-          />
-        </div>
-        <div>
-          <label>Email:</label>
-          <input
-            type="email"
-            name="email"
-            value={professorAtual.email}
-            onChange={handleChange}
-            disabled={!isEditing}
-            required
-          />
-        </div>
-        <div>
-          <label>Data de Cadastro:</label>
-          <input
-            type="date"
-            name="dataCadastro"
-            value={professorAtual.dataCadastro}
-            onChange={handleChange}
-            disabled={!isEditing}
-            required
-          />
+          <label>
+            <input
+              type="checkbox"
+              checked={ativo}
+              onChange={(e) => setAtivo(e.target.checked)}
+            />
+            Ativo
+          </label>
         </div>
 
         <div className="buttons">
-          {isEditing ? (
-            <>
-              <button type="button" onClick={handleSalvar}>Salvar</button>
-              <button type="button" onClick={handleCancelar}>Cancelar</button>
-            </>
-          ) : (
-            <>
-              <button type="button" onClick={handleNovo}>Novo</button>
-              <button type="button" onClick={() => handleEdit(professorAtual)}>Editar</button>
-              <button type="button" onClick={() => handleExcluir(professorAtual.id)}>Excluir</button>
-            </>
-          )}
+          <button onClick={handleCreateNewProfessor} disabled={!canCreate}>Novo</button>
+          <button onClick={handleEditProfessor} disabled={!canEdit}>Editar</button>
+          <button onClick={handleDeleteProfessor} disabled={!canDelete}>Excluir</button>
+          <button onClick={handleConsultProfessors} disabled={!canConsult}>Consultar</button>
         </div>
-      </form>
-
-      <div className="lista-professores">
-        <h3>Professores Cadastrados:</h3>
-        <ul>
-          {professores.map(professor => (
-            <li key={professor.id} onClick={() => setProfessorAtual(professor)}>
-              {professor.nome} - {professor.email}
-            </li>
-          ))}
-        </ul>
       </div>
     </div>
   );

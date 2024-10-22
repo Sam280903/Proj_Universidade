@@ -2,21 +2,20 @@ import React, { useState, useEffect } from 'react';
 import '../../visualPage/CadastroDisciplinas.css'; // Importe o arquivo CSS
 
 const CadastroDisciplinas = () => {
-  const [disciplinas, setDisciplinas] = useState([]);
   const [disciplinaAtual, setDisciplinaAtual] = useState({ id: null, nome: '', cargaHoraria: '' });
   const [isEditing, setIsEditing] = useState(false);
   const [novoCadastro, setNovoCadastro] = useState(false);
 
-  // Carregar as disciplinas do backend ao inicializar o componente
+  // Carregar a primeira disciplina do backend ao inicializar o componente
   useEffect(() => {
     const fetchDisciplinas = async () => {
-      const response = await fetch('/api/disciplinas');
-      if (response.ok) {
+      try {
+        const response = await fetch('/api/disciplinas');
+        if (!response.ok) throw new Error('Erro ao carregar disciplinas.');
         const data = await response.json();
-        setDisciplinas(data);
-        setDisciplinaAtual(data[0] || {}); // Set the first disciplina if available
-      } else {
-        alert('Erro ao carregar disciplinas.');
+        setDisciplinaAtual(data[0] || {});
+      } catch (error) {
+        alert(error.message);
       }
     };
 
@@ -39,62 +38,48 @@ const CadastroDisciplinas = () => {
 
   // Handle exclusão de disciplina
   const handleExcluir = async (id) => {
-    const response = await fetch(`/api/disciplinas/${id}`, {
-      method: 'DELETE',
-    });
-
-    if (response.ok) {
-      setDisciplinas(disciplinas.filter(disciplina => disciplina.id !== id));
-      setDisciplinaAtual(disciplinas[0] || {});
+    try {
+      const response = await fetch(`/api/disciplinas/${id}`, { method: 'DELETE' });
+      if (!response.ok) throw new Error('Erro ao excluir disciplina.');
+      alert('Disciplina excluída com sucesso!'); // Mensagem de confirmação
+      setDisciplinaAtual({ id: null, nome: '', cargaHoraria: '' });
       setIsEditing(false);
-    } else {
-      alert('Erro ao excluir disciplina.');
+    } catch (error) {
+      alert(error.message);
     }
   };
 
   // Handle salvar disciplina (edição ou novo)
   const handleSalvar = async () => {
-    if (novoCadastro) {
-      // Enviar os dados para o backend (novo cadastro)
-      const novaDisciplina = { ...disciplinaAtual }; // ID será gerado no backend
-      const response = await fetch('/api/disciplinas', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(novaDisciplina),
-      });
-
-      if (response.ok) {
+    try {
+      if (novoCadastro) {
+        const response = await fetch('/api/disciplinas', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(disciplinaAtual),
+        });
+        if (!response.ok) throw new Error('Erro ao salvar disciplina.');
         const data = await response.json();
-        setDisciplinas([...disciplinas, data]); // Atualiza a lista com o novo dado
+        alert('Disciplina salva com sucesso!'); // Mensagem de confirmação
       } else {
-        alert('Erro ao salvar disciplina.');
+        const response = await fetch(`/api/disciplinas/${disciplinaAtual.id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(disciplinaAtual),
+        });
+        if (!response.ok) throw new Error('Erro ao atualizar disciplina.');
+        alert('Disciplina atualizada com sucesso!'); // Mensagem de confirmação
       }
-    } else {
-      // Atualizar disciplina existente
-      const response = await fetch(`/api/disciplinas/${disciplinaAtual.id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(disciplinaAtual),
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        setDisciplinas(disciplinas.map(disciplina => (disciplina.id === disciplinaAtual.id ? data : disciplina)));
-      } else {
-        alert('Erro ao atualizar disciplina.');
-      }
+      setIsEditing(false);
+      setNovoCadastro(false);
+    } catch (error) {
+      alert(error.message);
     }
-    setIsEditing(false);
-    setNovoCadastro(false);
   };
 
   // Handle cancelar edição/novo cadastro
   const handleCancelar = () => {
-    setDisciplinaAtual(disciplinas[0] || {});
+    setDisciplinaAtual({ id: null, nome: '', cargaHoraria: '' });
     setIsEditing(false);
     setNovoCadastro(false);
   };
@@ -151,17 +136,6 @@ const CadastroDisciplinas = () => {
           )}
         </div>
       </form>
-
-      <div className="lista-disciplinas">
-        <h3>Disciplinas Cadastradas:</h3>
-        <ul>
-          {disciplinas.map(disciplina => (
-            <li key={disciplina.id} onClick={() => setDisciplinaAtual(disciplina)}>
-              {disciplina.nome}
-            </li>
-          ))}
-        </ul>
-      </div>
     </div>
   );
 };

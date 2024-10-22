@@ -25,6 +25,9 @@ function App() {
       <Sidebar />
       <div style={{ marginLeft: '250px', padding: '20px' }}>
         <Routes>
+          {/* Página inicial */}
+          <Route path="/" element={<Home />} />
+
           {/* Rotas de cadastro */}
           <Route path="/cadastros/CadastroAlunos" element={<CadastroAlunos />} />
           <Route path="/cadastros/CadastroDisciplinas" element={<CadastroDisciplinas />} />
@@ -38,9 +41,6 @@ function App() {
           <Route path="/consultas/ConsultaProfessores" element={<ConsultaProfessores />} />
           <Route path="/consultas/ConsultaSalas" element={<ConsultaSalas />} />
           <Route path="/consultas/ConsultaTurmas" element={<ConsultaTurmas />} />
-
-          {/* Página inicial */}
-          <Route path="/Home" element={<Home />} />
         </Routes>
       </div>
     </div>

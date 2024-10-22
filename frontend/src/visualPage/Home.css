@@ -32,9 +32,9 @@
 
 /* Estiliza o logo */
 .home-logo img {
-  max-width: 80%; /* Ajusta a largura máxima do logo para não ultrapassar o limite da tela */
+  max-width: 50%; /* Ajusta a largura máxima do logo para não ultrapassar o limite da tela */
   height: auto;
-  margin-top: 20px;
+  margin-top: 15px;
   transition: transform 0.3s ease; /* Adiciona transição suave */
 }
 
