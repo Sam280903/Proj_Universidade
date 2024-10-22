@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom'; // Adicionado para redirecionamento
 import '../../visualPage/CadastroProfessores.css'; // Importe o arquivo CSS
 
 const CadastroProfessores = () => {
+  const navigate = useNavigate(); // Inicializar o hook de navegação
   const [nome, setNome] = useState('');
   const [email, setEmail] = useState('');
   const [dataCadastro, setDataCadastro] = useState('');
@@ -63,8 +65,7 @@ const CadastroProfessores = () => {
 
   // Função para consultar professores
   const handleConsultProfessors = () => {
-    console.log('Consultando professores...');
-    // Implementação da lógica de consulta
+    navigate('/consultas/ConsultaProfessores'); // Redirecionar para a rota correta
   };
 
   // Função para limpar os campos do formulário

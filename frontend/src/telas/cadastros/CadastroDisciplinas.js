@@ -11,14 +11,21 @@ const CadastroDisciplinas = () => {
     const fetchDisciplinas = async () => {
       try {
         const response = await fetch('/api/disciplinas');
-        if (!response.ok) throw new Error('Erro ao carregar disciplinas.');
-        const data = await response.json();
+        if (!response.ok) {
+          // Verifica se a resposta não é JSON e lança um erro personalizado
+          const contentType = response.headers.get('content-type');
+          if (contentType && contentType.includes('text/html')) {
+            throw new Error('Resposta inesperada do servidor. Verifique o caminho da API.');
+          }
+          throw new Error('Erro ao carregar disciplinas.');
+        }
+        const data = await response.json(); // Se a resposta for JSON, continua
         setDisciplinaAtual(data[0] || {});
       } catch (error) {
         alert(error.message);
       }
     };
-
+  
     fetchDisciplinas();
   }, []);
 

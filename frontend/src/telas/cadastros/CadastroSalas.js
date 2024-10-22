@@ -67,7 +67,7 @@ const CadastroSalas = () => {
   };
 
   const handleConsultSalas = () => {
-    navigate('/consulta/salas');
+    navigate('/consultas/ConsultaSalas');
   };
 
   const clearFields = () => {

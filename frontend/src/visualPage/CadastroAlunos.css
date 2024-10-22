@@ -1,16 +1,21 @@
-table {
+/* src/components/visualPage/TabelaEstilos.css */
+
+/* Estiliza a tabela */
+.table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 20px;
 }
 
-th, td {
+/* Estiliza as células da tabela */
+.table th, .table td {
   padding: 10px;
   border: 1px solid #ddd;
   text-align: left;
 }
 
-th {
+/* Estiliza o cabeçalho da tabela */
+.table th {
   background-color: #f4f4f4;
   font-weight: bold;
 }
@@ -27,12 +32,13 @@ th {
   margin-right: 5px;
 }
 
+/* Altera a cor do botão ao passar o mouse */
 .table-buttons button:hover {
   background-color: #0056b3;
 }
 
 /* Estiliza o checkbox */
-input[type="checkbox"] {
+.table input[type="checkbox"] {
   width: 18px;
   height: 18px;
 }
