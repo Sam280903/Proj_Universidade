@@ -1,11 +1,12 @@
 // controllers/SalaController.js
 const Sala = require('../models/Sala');
+const VwSalas = require('../models/VwSalas'); // Importa o modelo da view de Salas
 
 const SalaController = {
-  // Função para obter todas as salas
+  // Função para obter todas as salas (usando a view)
   async getSalas(req, res) {
     try {
-      const salas = await Sala.getAll();
+      const salas = await VwSalas.findAll(); // Buscar todas as salas da view
       res.status(200).json(salas);
     } catch (err) {
       res.status(500).json({ message: 'Erro ao buscar salas', error: err.message });

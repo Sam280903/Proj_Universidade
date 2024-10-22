@@ -1,5 +1,5 @@
-const { Sequelize, DataTypes } = require('sequelize');
-const sequelize = require('../db'); // Conexão com o banco de dados
+const { DataTypes } = require('sequelize');
+const sequelize = require('../config/db'); // Ajuste o caminho conforme necessário
 
 const Disciplina = sequelize.define('Disciplina', {
   nome: {
@@ -10,6 +10,9 @@ const Disciplina = sequelize.define('Disciplina', {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
+}, {
+  timestamps: true,
+  tableName: 'disciplinas',
 });
 
 module.exports = Disciplina;

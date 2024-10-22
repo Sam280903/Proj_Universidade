@@ -1,5 +1,5 @@
 // models/Sala.js
-const db = require('../config/db');  // Arquivo de configuração do MySQL
+const db = require('./db');  // Corrigido o caminho para o arquivo de configuração do MySQL
 
 const Sala = {
   // Função para buscar todas as salas
@@ -44,6 +44,9 @@ const Sala = {
   async delete(id) {
     try {
       const [result] = await db.execute('DELETE FROM salas WHERE id = ?', [id]);
+      if (result.affectedRows === 0) {
+        throw new Error('Sala não encontrada'); // Verifica se a sala foi encontrada
+      }
       return result;
     } catch (err) {
       throw new Error('Erro ao excluir sala: ' + err.message);

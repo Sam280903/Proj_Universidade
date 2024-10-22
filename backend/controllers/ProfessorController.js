@@ -1,9 +1,10 @@
 const ProfessorModel = require('../models/ProfessorModel');
+const VwProfessores = require('../models/VwProfessores'); // Importa o modelo da view de Professores
 
-// Obter todos os professores
+// Obter todos os professores (agora usando a view)
 const getAllProfessores = async (req, res) => {
   try {
-    const professores = await ProfessorModel.getProfessores();
+    const professores = await VwProfessores.findAll(); // Buscar os professores da view
     res.status(200).json(professores);
   } catch (error) {
     res.status(500).json({ error: 'Erro ao buscar os professores' });

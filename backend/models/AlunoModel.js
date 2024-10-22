@@ -1,25 +1,26 @@
+// models/Aluno.js
 const { DataTypes } = require('sequelize');
-const sequelize = require('../config/db'); // Certifique-se de que este caminho está correto
+const sequelize = require('./db'); // Corrigido o caminho para o arquivo de configuração do Sequelize
 
 // Definição do modelo Aluno com Sequelize
 const Aluno = sequelize.define('Aluno', {
   nome: {
     type: DataTypes.STRING,
-    allowNull: false
+    allowNull: false,
   },
   email: {
     type: DataTypes.STRING,
     allowNull: false,
-    unique: true // Garantir que o email seja único
+    unique: true, // Garantir que o email seja único
   },
   telefone: {
     type: DataTypes.STRING,
-    allowNull: true
-  }
+    allowNull: true,
+  },
 }, {
   // Opções do modelo
-  timestamps: true,  // Adiciona campos createdAt e updatedAt
-  tableName: 'alunos'  // Nome da tabela no banco de dados
+  timestamps: true, // Adiciona campos createdAt e updatedAt
+  tableName: 'alunos', // Nome da tabela no banco de dados
 });
 
 // Função para criar um aluno
@@ -28,7 +29,7 @@ const createAluno = async (nome, email, telefone) => {
     const novoAluno = await Aluno.create({ nome, email, telefone });
     return novoAluno;
   } catch (err) {
-    throw err;
+    throw new Error('Erro ao criar aluno: ' + err.message); // Melhoria na mensagem de erro
   }
 };
 
@@ -38,7 +39,7 @@ const getAllAlunos = async () => {
     const alunos = await Aluno.findAll();
     return alunos;
   } catch (err) {
-    throw err;
+    throw new Error('Erro ao buscar alunos: ' + err.message); // Melhoria na mensagem de erro
   }
 };
 
@@ -58,7 +59,7 @@ const updateAluno = async (id, nome, email, telefone) => {
     await aluno.save();
     return aluno;
   } catch (err) {
-    throw err;
+    throw new Error('Erro ao atualizar aluno: ' + err.message); // Melhoria na mensagem de erro
   }
 };
 
@@ -74,7 +75,7 @@ const deleteAluno = async (id) => {
     await aluno.destroy();
     return { message: 'Aluno excluído com sucesso' };
   } catch (err) {
-    throw err;
+    throw new Error('Erro ao excluir aluno: ' + err.message); // Melhoria na mensagem de erro
   }
 };
 

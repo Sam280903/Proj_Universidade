@@ -1,23 +1,21 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';  // Importando Axios para fazer as requisições HTTP
 
 const CadastroAlunos = () => {
   const navigate = useNavigate();
 
   // Estado para controlar os dados do aluno
   const [nome, setNome] = useState('');
-  const [idade, setIdade] = useState('');
+  const [email, setEmail] = useState('');
+  const [dataCadastro, setDataCadastro] = useState('');
+  const [matricula, setMatricula] = useState('');
+  const [inativo, setInativo] = useState(false); // checkbox de inativo
   const [alunos, setAlunos] = useState([]);
   const [editingAluno, setEditingAluno] = useState(null);  // Estado para armazenar o aluno que está sendo editado
-  
-  // Estados de habilitação dos botões
-  const [canEdit, setCanEdit] = useState(false);
-  const [canDelete, setCanDelete] = useState(false);
-  const [canConsult, setCanConsult] = useState(true);
   const [canCreate, setCanCreate] = useState(true);
 
-  // UseEffect para carregar os alunos quando a página é carregada
+  // UseEffect para carregar os alunos ao carregar a página
   useEffect(() => {
     fetchAlunos();
   }, []);
@@ -37,12 +35,14 @@ const CadastroAlunos = () => {
     try {
       const response = await axios.post('http://localhost:5000/alunos', {
         nome,
-        idade
+        email,
+        dataCadastro,
+        matricula,
+        inativo
       });
       console.log(response.data);  // Sucesso no backend
       fetchAlunos();  // Atualizar lista de alunos
-      setNome('');  // Limpar os campos após cadastro
-      setIdade('');
+      clearFields();  // Limpar campos
     } catch (err) {
       console.error('Erro ao criar aluno:', err);
     }
@@ -50,32 +50,31 @@ const CadastroAlunos = () => {
 
   // Função para editar aluno
   const handleEditAluno = async (id) => {
-    try {
-      const alunoToEdit = alunos.find(aluno => aluno.id === id);
-      setNome(alunoToEdit.nome);
-      setIdade(alunoToEdit.idade);
-      setEditingAluno(alunoToEdit);  // Marcar que está editando
-      setCanEdit(true);  // Permitir editar
-      setCanCreate(false);  // Desabilitar criar durante a edição
-    } catch (err) {
-      console.error('Erro ao editar aluno:', err);
-    }
+    const alunoToEdit = alunos.find(aluno => aluno.id === id);
+    setNome(alunoToEdit.nome);
+    setEmail(alunoToEdit.email);
+    setDataCadastro(alunoToEdit.dataCadastro);
+    setMatricula(alunoToEdit.matricula);
+    setInativo(alunoToEdit.inativo);
+    setEditingAluno(alunoToEdit);  // Marcar como em edição
+    setCanCreate(false);  // Desabilitar criar enquanto edita
   };
 
-  // Função para salvar edição de aluno
+  // Função para salvar a edição
   const handleSaveEdit = async () => {
     try {
       const response = await axios.put(`http://localhost:5000/alunos/${editingAluno.id}`, {
         nome,
-        idade
+        email,
+        dataCadastro,
+        matricula,
+        inativo
       });
       console.log(response.data);  // Sucesso no backend
       fetchAlunos();  // Atualizar lista de alunos
-      setNome('');  // Limpar os campos
-      setIdade('');
+      clearFields();  // Limpar os campos
       setEditingAluno(null);  // Finalizar a edição
-      setCanEdit(false);  // Desabilitar edição
-      setCanCreate(true);  // Habilitar criar novamente
+      setCanCreate(true);  // Habilitar o botão de criar
     } catch (err) {
       console.error('Erro ao salvar edição:', err);
     }
@@ -94,7 +93,16 @@ const CadastroAlunos = () => {
 
   // Função para navegar para consulta de alunos
   const handleConsultAlunos = () => {
-    navigate('/consulta/alunos');
+    navigate('/consultas/ConsultaAlunos');
+  };
+
+  // Função para limpar os campos do formulário
+  const clearFields = () => {
+    setNome('');
+    setEmail('');
+    setDataCadastro('');
+    setMatricula('');
+    setInativo(false);
   };
 
   return (
@@ -110,12 +118,35 @@ const CadastroAlunos = () => {
           onChange={(e) => setNome(e.target.value)}
         />
         <input
-          type="number"
-          placeholder="Idade"
-          value={idade}
-          onChange={(e) => setIdade(e.target.value)}
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
         />
-        
+        <input
+          type="date"
+          placeholder="Data de Cadastro"
+          value={dataCadastro}
+          onChange={(e) => setDataCadastro(e.target.value)}
+        />
+        <input
+          type="text"
+          placeholder="Matrícula"
+          value={matricula}
+          onChange={(e) => setMatricula(e.target.value)}
+        />
+        <div>
+          <label>
+            Inativo:
+            <input
+              type="checkbox"
+              checked={inativo}
+              onChange={(e) => setInativo(e.target.checked)}
+            />
+          </label>
+        </div>
+
+        {/* Botões */}
         {editingAluno ? (
           <button onClick={handleSaveEdit}>Salvar Edição</button>
         ) : (
@@ -123,22 +154,43 @@ const CadastroAlunos = () => {
         )}
       </div>
 
-      {/* Lista de alunos */}
+      {/* Tabela de alunos */}
       <div>
         <h2>Lista de Alunos</h2>
-        <ul>
-          {alunos.map(aluno => (
-            <li key={aluno.id}>
-              {aluno.nome} - {aluno.idade} anos
-              <button onClick={() => handleEditAluno(aluno.id)} disabled={!canEdit}>Editar</button>
-              <button onClick={() => handleDeleteAluno(aluno.id)} disabled={!canDelete}>Excluir</button>
-            </li>
-          ))}
-        </ul>
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nome</th>
+              <th>Email</th>
+              <th>Data de Cadastro</th>
+              <th>Matrícula</th>
+              <th>Inativo</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            {alunos.map(aluno => (
+              <tr key={aluno.id}>
+                <td>{aluno.id}</td>
+                <td>{aluno.nome}</td>
+                <td>{aluno.email}</td>
+                <td>{aluno.dataCadastro}</td>
+                <td>{aluno.matricula}</td>
+                <td>{aluno.inativo ? 'Sim' : 'Não'}</td>
+                <td>
+                  <button onClick={() => handleEditAluno(aluno.id)}>Editar</button>
+                  <button onClick={() => handleDeleteAluno(aluno.id)}>Excluir</button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
 
+      {/* Botão para consultar alunos */}
       <div>
-        <button onClick={handleConsultAlunos} disabled={!canConsult}>Consultar Alunos</button>
+        <button onClick={handleConsultAlunos}>Consultar Alunos</button>
       </div>
     </div>
   );

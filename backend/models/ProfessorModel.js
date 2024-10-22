@@ -1,10 +1,11 @@
-const db = require('../config/database'); // Configuração do banco de dados
+const db = require('./db'); // Corrigido o caminho para o arquivo de configuração do banco de dados
 
 // Função para obter todos os professores
 const getProfessores = () => {
   return new Promise((resolve, reject) => {
     db.query('SELECT * FROM professores', (error, results) => {
       if (error) {
+        console.error(error); // Log do erro para facilitar a depuração
         return reject(error);
       }
       return resolve(results);
@@ -21,6 +22,7 @@ const createProfessor = (professor) => {
       [nome, email, dataCadastro],
       (error, results) => {
         if (error) {
+          console.error(error); // Log do erro para facilitar a depuração
           return reject(error);
         }
         return resolve(results.insertId);
@@ -38,6 +40,7 @@ const updateProfessor = (id, professor) => {
       [nome, email, dataCadastro, id],
       (error, results) => {
         if (error) {
+          console.error(error); // Log do erro para facilitar a depuração
           return reject(error);
         }
         return resolve(results);
@@ -47,10 +50,26 @@ const updateProfessor = (id, professor) => {
 };
 
 // Função para excluir um professor
-const deleteProfessor = (id) => {
+const deleteProfessor = async (id) => {
+  // Verifica se o professor existe antes de tentar deletá-lo
+  const [professor] = await new Promise((resolve, reject) => {
+    db.query('SELECT * FROM professores WHERE id = ?', [id], (error, results) => {
+      if (error) {
+        console.error(error); // Log do erro para facilitar a depuração
+        return reject(error);
+      }
+      return resolve(results);
+    });
+  });
+
+  if (!professor) {
+    throw new Error('Professor não encontrado'); // Retorna erro se o professor não existe
+  }
+
   return new Promise((resolve, reject) => {
     db.query('DELETE FROM professores WHERE id = ?', [id], (error, results) => {
       if (error) {
+        console.error(error); // Log do erro para facilitar a depuração
         return reject(error);
       }
       return resolve(results);

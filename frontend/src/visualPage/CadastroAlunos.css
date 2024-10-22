@@ -1,110 +1,38 @@
-/* src/components/visualPage/CadastroAlunos.css */
-
-/* Centraliza o formulário e define o estilo da caixa de cadastro */
-.cadastro-container {
-  max-width: 500px; /* Aumenta a largura máxima para se alinhar com o outro formulário */
-  margin: 50px auto;
-  padding: 20px;
-  background-color: #f4f4f4; /* Cor de fundo semelhante */
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra suave */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
 }
 
-/* Estiliza o título */
-.header h2 {
-  text-align: center;
-  margin-bottom: 20px;
-  font-family: Arial, sans-serif;
-  color: #333;
-}
-
-/* Estilo para o botão de voltar */
-.back-button {
-  background-color: transparent;
-  border: none;
-  font-size: 20px;
-  cursor: pointer;
-  margin-bottom: 20px; /* Adiciona um pouco mais de espaço entre o botão e o título */
-}
-
-/* Define a estrutura do formulário */
-.form-container {
-  display: flex;
-  flex-direction: column;
-}
-
-.form-container div {
-  margin-bottom: 15px;
-}
-
-/* Define o estilo das labels */
-.form-container label {
-  margin-bottom: 5px;
-  font-weight: bold;
-  font-size: 14px;
-  color: #555;
-}
-
-/* Estiliza os inputs do formulário */
-.form-container input {
+th, td {
   padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  width: 100%;
-  font-size: 16px;
-  color: #333;
-  box-sizing: border-box;
-  transition: border-color 0.3s ease;
+  border: 1px solid #ddd;
+  text-align: left;
 }
 
-/* Foca nos inputs quando o usuário clica neles */
-.form-container input:focus {
-  border-color: #007bff;
-  outline: none;
+th {
+  background-color: #f4f4f4;
+  font-weight: bold;
 }
 
-/* Estiliza os botões */
-.buttons {
-  display: flex;
-  justify-content: space-around;
-}
-
-/* Estilo para o botão principal */
-button {
-  width: 100%;
-  padding: 12px;
-  background-color: #4CAF50;
+/* Estiliza os botões dentro da tabela */
+.table-buttons button {
+  padding: 8px 12px;
+  background-color: #007bff;
   color: white;
   border: none;
   border-radius: 4px;
-  font-size: 16px;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  margin-right: 5px;
 }
 
-/* Altera a cor do botão ao passar o mouse */
-button:hover {
-  background-color: #45a049;
+.table-buttons button:hover {
+  background-color: #0056b3;
 }
 
-/* Desabilita o botão */
-button:disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
-}
-
-/* Estilo responsivo para telas menores */
-@media (max-width: 600px) {
-  .cadastro-container {
-    padding: 15px;
-  }
-
-  .form-container input {
-    font-size: 14px;
-  }
-
-  .buttons button {
-    font-size: 14px;
-    padding: 10px;
-  }
+/* Estiliza o checkbox */
+input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
 }

@@ -1,4 +1,6 @@
-const Aluno = require('../models/Aluno');  // Verifique se o caminho para o modelo está correto
+// controllers/AlunoController.js
+const Aluno = require('../models/Aluno');
+const VwAlunos = require('../models/VwAlunos'); // Importa o modelo da view de Alunos
 
 // Função para criar um novo aluno
 const createAluno = async (req, res) => {
@@ -20,10 +22,10 @@ const createAluno = async (req, res) => {
   }
 };
 
-// Função para listar todos os alunos
+// Função para listar todos os alunos (usando a view)
 const getAllAlunos = async (req, res) => {
   try {
-    const alunos = await Aluno.findAll();  // Buscar todos os alunos
+    const alunos = await VwAlunos.findAll();  // Buscar todos os alunos da view
     res.status(200).json(alunos);  // Retorna todos os alunos
   } catch (err) {
     console.error(err);

@@ -1,4 +1,5 @@
 const Disciplina = require('../models/Disciplina'); // Importa o modelo de Disciplina
+const VwDisciplinas = require('../models/VwDisciplinas'); // Importa o modelo da view de Disciplinas
 
 // Criar uma nova disciplina
 exports.create = async (req, res) => {
@@ -10,10 +11,10 @@ exports.create = async (req, res) => {
   }
 };
 
-// Obter todas as disciplinas
+// Obter todas as disciplinas (agora usando a view)
 exports.getAll = async (req, res) => {
   try {
-    const disciplinas = await Disciplina.findAll();
+    const disciplinas = await VwDisciplinas.findAll(); // Buscar as disciplinas da view
     res.status(200).json(disciplinas);
   } catch (error) {
     res.status(500).json({ error: 'Erro ao obter disciplinas' });
