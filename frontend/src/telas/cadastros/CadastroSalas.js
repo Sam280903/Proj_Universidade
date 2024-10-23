@@ -1,124 +1,120 @@
-import React, { useState, useEffect } from 'react'; 
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import '../../visualPage/CadastroSalas.css';
+import '../../visualPage/CadastroSalas.css'; // Arquivo CSS para o layout
 
 const CadastroSalas = () => {
   const navigate = useNavigate();
-  const [numeroSala, setNumeroSala] = useState('');
+
+  // Estado para controlar os dados da sala
+  const [idSala, setIdSala] = useState(null);  // Adicionando o campo ID
+  const [nome, setNome] = useState('');
   const [capacidade, setCapacidade] = useState('');
-  const [dataCadastro, setDataCadastro] = useState('');
-  const [isActive, setIsActive] = useState(true); // Estado para controlar se a sala está ativa
-  const [salas, setSalas] = useState([]);
-  const [canEdit, setCanEdit] = useState(true);
-  const [canDelete, setCanDelete] = useState(true);
-  const [canConsult, setCanConsult] = useState(true);
+  const [editingSala, setEditingSala] = useState(null);
+
+  // Estados para controlar habilitação de botões
   const [canCreate, setCanCreate] = useState(true);
+  const [canEdit, setCanEdit] = useState(false);
+  const [canDelete, setCanDelete] = useState(false);
+  const [canConsult, setCanConsult] = useState(true);
 
-  useEffect(() => {
-    fetchSalas();
-  }, []);
-
+  // Função para buscar salas cadastradas no backend
   const fetchSalas = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/salas');
-      setSalas(response.data);
+      const response = await axios.get('http://localhost:5000/salas');
+      const salas = response.data;
+      // Aqui você pode adicionar lógica adicional se necessário
     } catch (err) {
       console.error('Erro ao consultar salas:', err);
     }
   };
 
+  // Função para criar nova sala
   const handleCreateNewSala = async () => {
     try {
-      await axios.post('http://localhost:5000/api/salas', {
-        numeroSala,
+      await axios.post('http://localhost:5000/salas', {
+        nome,
         capacidade,
-        dataCadastro,
-        isActive, // Enviar o estado ativo/inativo ao criar uma nova sala
       });
-      fetchSalas();
-      clearFields();
+      clearFields();  // Limpa os campos
     } catch (err) {
       console.error('Erro ao criar sala:', err);
     }
   };
 
-  const handleEditSala = async (id) => {
+  // Função para editar sala
+  const handleEditSala = async () => {
     try {
-      await axios.put(`http://localhost:5000/api/salas/${id}`, {
-        numeroSala,
+      await axios.put(`http://localhost:5000/salas/${idSala}`, {
+        nome,
         capacidade,
-        dataCadastro,
-        isActive, // Enviar o estado ativo/inativo ao editar
       });
-      fetchSalas();
+      clearFields();
     } catch (err) {
       console.error('Erro ao editar sala:', err);
     }
   };
 
-  const handleDeleteSala = async (id) => {
+  // Função para excluir sala
+  const handleDeleteSala = async () => {
     try {
-      await axios.delete(`http://localhost:5000/api/salas/${id}`);
-      fetchSalas();
+      await axios.delete(`http://localhost:5000/salas/${idSala}`);
+      clearFields();
     } catch (err) {
       console.error('Erro ao excluir sala:', err);
     }
   };
 
+  // Função para consultar salas
   const handleConsultSalas = () => {
     navigate('/consultas/ConsultaSalas');
   };
 
+  // Função para limpar os campos do formulário
   const clearFields = () => {
-    setNumeroSala('');
+    setIdSala(null);
+    setNome('');
     setCapacidade('');
-    setDataCadastro('');
-    setIsActive(true); // Resetar para ativo por padrão após cadastro
+    setCanEdit(false);
+    setCanDelete(false);
   };
 
   return (
     <div className="container-cadastro-salas">
-      <h2>Cadastro de Sala</h2>
-      <div className="form-container">
-        <input
-          type="text"
-          placeholder="Número da Sala"
-          value={numeroSala}
-          onChange={(e) => setNumeroSala(e.target.value)}
-        />
-        <input
-          type="number"
-          placeholder="Capacidade"
-          value={capacidade}
-          onChange={(e) => setCapacidade(e.target.value)}
-        />
-        <input
-          type="date"
-          placeholder="Data de Cadastro"
-          value={dataCadastro}
-          onChange={(e) => setDataCadastro(e.target.value)}
-        />
-
-        {/* Checkbox para inativar sala */}
+      <h2>{editingSala ? 'Editar Sala' : 'Cadastro de Salas'}</h2>
+      
+      <div className="form-cadastro">
         <div>
-          <label>
-            <input
-              type="checkbox"
-              checked={!isActive} // Quando marcado, a sala será inativa
-              onChange={(e) => setIsActive(!e.target.checked)} // Alterar estado ativo/inativo
-            />
-            Inativar sala
-          </label>
+          <label>ID da Sala:</label>
+          <input
+            type="text"
+            value={idSala || ''}
+            disabled
+          />
         </div>
-      </div>
+        <div>
+          <label>Nome:</label>
+          <input
+            type="text"
+            value={nome}
+            onChange={(e) => setNome(e.target.value)}
+          />
+        </div>
+        <div>
+          <label>Capacidade:</label>
+          <input
+            type="number"
+            value={capacidade}
+            onChange={(e) => setCapacidade(e.target.value)}
+          />
+        </div>
 
-      {/* Botões para ação */}
-      <div className="buttons">
-        <button onClick={handleCreateNewSala} disabled={!canCreate}>Novo</button>
-        <button onClick={handleEditSala} disabled={!canEdit}>Editar</button>
-        <button onClick={handleDeleteSala} disabled={!canDelete}>Excluir</button>
-        <button onClick={handleConsultSalas} disabled={!canConsult}>Consultar</button>
+        <div className="buttons">
+          <button onClick={handleCreateNewSala} disabled={!canCreate}>Novo</button>
+          <button onClick={handleEditSala} disabled={!canEdit}>Salvar</button>
+          <button onClick={handleDeleteSala} disabled={!canDelete}>Excluir</button>
+          <button onClick={handleConsultSalas} disabled={!canConsult}>Consultar</button>
+        </div>
       </div>
     </div>
   );

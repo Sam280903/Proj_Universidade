@@ -1,44 +1,99 @@
-/* src/components/visualPage/TabelaEstilos.css */
-
-/* Estiliza a tabela */
-.table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 20px;
+/* Definindo a fonte base */
+body {
+  font-family: Arial, sans-serif;
+  color: #333;
+  margin: 0;
+  padding: 0;
 }
 
-/* Estiliza as células da tabela */
-.table th, .table td {
-  padding: 10px;
-  border: 1px solid #ddd;
-  text-align: left;
-}
-
-/* Estiliza o cabeçalho da tabela */
-.table th {
+/* Centraliza o formulário e define o estilo da caixa de cadastro */
+.container-cadastro-alunos {
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 20px;
   background-color: #f4f4f4;
-  font-weight: bold;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* Estiliza os botões dentro da tabela */
-.table-buttons button {
-  padding: 8px 12px;
-  background-color: #007bff;
+/* Estiliza o título */
+.container-cadastro-alunos h2 {
+  text-align: center;
+  margin: 20px 0 20px 0;
+  font-family: Arial, sans-serif;
+  color: #333;
+}
+
+/* Define o estilo das labels */
+.container-cadastro-alunos label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  font-size: 14px;
+  color: #555;
+}
+
+/* Estiliza os inputs do formulário */
+.container-cadastro-alunos input[type="text"],
+.container-cadastro-alunos input[type="email"],
+.container-cadastro-alunos input[type="date"] {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+  color: #333;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease;
+}
+
+/* Foca nos inputs quando o usuário clica neles */
+.container-cadastro-alunos input[type="text"]:focus,
+.container-cadastro-alunos input[type="email"]:focus,
+.container-cadastro-alunos input[type="date"]:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+/* Estiliza o checkbox de inativo */
+.container-cadastro-alunos input[type="checkbox"] {
+  margin-right: 10px;
+}
+
+/* Estiliza o botão de cadastro */
+.container-cadastro-alunos button {
+  width: 100%;
+  padding: 12px;
+  background-color: #4CAF50;
   color: white;
   border: none;
   border-radius: 4px;
+  font-size: 16px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
-  margin-right: 5px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 /* Altera a cor do botão ao passar o mouse */
-.table-buttons button:hover {
-  background-color: #0056b3;
+.container-cadastro-alunos button:hover {
+  background-color: #45a049;
+  transform: translateY(-2px);
 }
 
-/* Estiliza o checkbox */
-.table input[type="checkbox"] {
-  width: 18px;
-  height: 18px;
+/* Estilo responsivo para telas menores */
+@media (max-width: 600px) {
+  .container-cadastro-alunos {
+    padding: 15px;
+  }
+
+  .container-cadastro-alunos input[type="text"],
+  .container-cadastro-alunos input[type="email"],
+  .container-cadastro-alunos input[type="date"] {
+    font-size: 14px;
+  }
+
+  .container-cadastro-alunos button {
+    font-size: 14px;
+    padding: 10px;
+  }
 }

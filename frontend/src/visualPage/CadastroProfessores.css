@@ -1,13 +1,19 @@
-/* src/components/visualPage/CadastroProfessores.css */
+/* Definindo a fonte base */
+body {
+  font-family: Arial, sans-serif;
+  color: #333;
+  margin: 0;
+  padding: 0;
+}
 
 /* Centraliza o formulário e define o estilo da caixa de cadastro */
 .container-cadastro-professores {
-  max-width: 500px; /* A mesma largura máxima */
+  max-width: 500px;
   margin: 50px auto;
   padding: 20px;
-  background-color: #f4f4f4; /* Cor de fundo igual ao das outras seções */
+  background-color: #f4f4f4;
   border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra suave */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 /* Estiliza o título */
@@ -19,7 +25,7 @@
 }
 
 /* Define a estrutura do formulário */
-.form-container {
+.form-cadastro {
   display: flex;
   flex-direction: column;
 }
@@ -36,10 +42,11 @@
 .container-cadastro-professores input[type="text"],
 .container-cadastro-professores input[type="email"],
 .container-cadastro-professores input[type="date"] {
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
   width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
   font-size: 16px;
   color: #333;
   box-sizing: border-box;
@@ -58,9 +65,9 @@
 .buttons {
   display: flex;
   justify-content: space-around;
+  margin-top: 20px;
 }
 
-/* Estilo para o botão principal */
 button {
   width: 100%;
   padding: 12px;
@@ -70,12 +77,13 @@ button {
   border-radius: 4px;
   font-size: 16px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 /* Altera a cor do botão ao passar o mouse */
 button:hover {
   background-color: #45a049;
+  transform: translateY(-2px);
 }
 
 /* Desabilita o botão */
