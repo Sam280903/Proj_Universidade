@@ -1,85 +1,36 @@
-const db = require('./db'); // Corrigido o caminho para o arquivo de configuração do banco de dados
+const { DataTypes } = require('sequelize');
+const sequelize = require('../db');
 
-// Função para obter todos os professores
-const getProfessores = () => {
-  return new Promise((resolve, reject) => {
-    db.query('SELECT * FROM professores', (error, results) => {
-      if (error) {
-        console.error(error); // Log do erro para facilitar a depuração
-        return reject(error);
-      }
-      return resolve(results);
-    });
-  });
-};
+const Professor = sequelize.define('Professor', {
+  idProfessor: {
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
+    primaryKey: true,
+  },
+  nome: {
+    type: DataTypes.STRING(45),
+    allowNull: false,
+  },
+  email: {
+    type: DataTypes.STRING(45),
+    allowNull: false,
+  },
+  dataCadastro: {
+    type: DataTypes.DATE,  // Melhor utilizar DATE ao invés de VARCHAR para datas
+    allowNull: false,
+  },
+  inativo: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false,
+  },
+  cpfCNPJ: {
+    type: DataTypes.STRING(18),  // Usar STRING ao invés de DOUBLE para CPF/CNPJ
+    allowNull: false,
+    unique: true,
+  },
+}, {
+  tableName: 'Professores',
+  timestamps: false,
+});
 
-// Função para adicionar um novo professor
-const createProfessor = (professor) => {
-  const { nome, email, dataCadastro } = professor;
-  return new Promise((resolve, reject) => {
-    db.query(
-      'INSERT INTO professores (nome, email, dataCadastro) VALUES (?, ?, ?)',
-      [nome, email, dataCadastro],
-      (error, results) => {
-        if (error) {
-          console.error(error); // Log do erro para facilitar a depuração
-          return reject(error);
-        }
-        return resolve(results.insertId);
-      }
-    );
-  });
-};
-
-// Função para atualizar um professor
-const updateProfessor = (id, professor) => {
-  const { nome, email, dataCadastro } = professor;
-  return new Promise((resolve, reject) => {
-    db.query(
-      'UPDATE professores SET nome = ?, email = ?, dataCadastro = ? WHERE id = ?',
-      [nome, email, dataCadastro, id],
-      (error, results) => {
-        if (error) {
-          console.error(error); // Log do erro para facilitar a depuração
-          return reject(error);
-        }
-        return resolve(results);
-      }
-    );
-  });
-};
-
-// Função para excluir um professor
-const deleteProfessor = async (id) => {
-  // Verifica se o professor existe antes de tentar deletá-lo
-  const [professor] = await new Promise((resolve, reject) => {
-    db.query('SELECT * FROM professores WHERE id = ?', [id], (error, results) => {
-      if (error) {
-        console.error(error); // Log do erro para facilitar a depuração
-        return reject(error);
-      }
-      return resolve(results);
-    });
-  });
-
-  if (!professor) {
-    throw new Error('Professor não encontrado'); // Retorna erro se o professor não existe
-  }
-
-  return new Promise((resolve, reject) => {
-    db.query('DELETE FROM professores WHERE id = ?', [id], (error, results) => {
-      if (error) {
-        console.error(error); // Log do erro para facilitar a depuração
-        return reject(error);
-      }
-      return resolve(results);
-    });
-  });
-};
-
-module.exports = {
-  getProfessores,
-  createProfessor,
-  updateProfessor,
-  deleteProfessor
-};
+module.exports = Professor;
